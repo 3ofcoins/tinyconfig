@@ -1,6 +1,6 @@
 require "tinyconfig/version"
 
-class Tinyconfig
+class Tinyconfig < BasicObject
   class << self
     def option(option_name)
       option_name = option_name.to_sym
@@ -22,5 +22,9 @@ class Tinyconfig
 
   def configure(&block)
     self.instance_eval(&block)
+  end
+
+  def read(path)
+    self.instance_eval(::File.read(path), path, 0)
   end
 end

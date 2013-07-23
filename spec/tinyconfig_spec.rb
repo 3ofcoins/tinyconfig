@@ -22,4 +22,9 @@ describe Tinyconfig do
   it 'raises an exception when somebody tries to set undefined value' do
     expect { rescuing { cfg.configure { nopt -1 } }.is_a? NoMethodError }
   end
+
+  it 'allows reading configuration from file' do
+    cfg.read(fixture 'basic.rb')
+    expect { cfg.opt == 23 }
+  end
 end

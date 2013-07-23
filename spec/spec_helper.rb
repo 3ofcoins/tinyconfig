@@ -21,6 +21,10 @@ end
 
 class MiniTest::Spec
   include TinyconfigSpec::WrongHelper
+
+  def fixture(filename)
+    File.join(File.dirname(__FILE__), 'fixtures', filename)
+  end
 end
 
 if ENV['COVERAGE']
