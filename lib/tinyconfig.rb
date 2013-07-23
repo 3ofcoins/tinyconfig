@@ -24,7 +24,8 @@ class Tinyconfig < BasicObject
     self.instance_eval(&block)
   end
 
-  def read(path)
-    self.instance_eval(::File.read(path), path, 0)
+  def load(path)
+    full_path = ::File.join(::File.dirname(::Kernel.caller.first), path)
+    self.instance_eval(::File.read(full_path), full_path, 0)
   end
 end
