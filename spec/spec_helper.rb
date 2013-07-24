@@ -33,4 +33,24 @@ if ENV['COVERAGE']
   SimpleCov.command_name 'rake spec'
 end
 
+# Make Tinyconfig pretty-printable.
 require "tinyconfig"
+class Tinyconfig
+  begin
+    old_verbose, $VERBOSE = $VERBOSE, nil
+    def object_id ; __id__ ; end
+  ensure
+    $VERBOSE = old_verbose
+  end
+
+  def class
+    __realclass__
+  end
+
+  def pretty_print(pp)
+    pp.object_address_group(self) do
+      pp.breakable
+      pp.pp_hash(@_values)
+    end
+  end
+end

@@ -2,8 +2,9 @@ require "tinyconfig/version"
 
 class Tinyconfig < BasicObject
   class << self
-    def option(option_name, default=nil)
+    def option(option_name, default=nil, &block)
       option_name = option_name.to_sym
+      validator = block_given? ? block : nil
       define_method option_name do |*args|
         if args.length.zero?
           if @_values.include?(option_name)
@@ -11,6 +12,8 @@ class Tinyconfig < BasicObject
           else
             default
           end
+        elsif validator
+          @_values[option_name] = validator.call(*args)
         elsif args.length == 1
           @_values[option_name] = args.first
         else
@@ -31,5 +34,22 @@ class Tinyconfig < BasicObject
   def load(path)
     full_path = ::File.join(::File.dirname(::Kernel.caller.first), path)
     self.instance_eval(::File.read(full_path), full_path, 0)
+  end
+
+  #
+  # Compat methods
+  # --------------
+
+  def inspect
+    _values = @_values.sort.map { |k,v| " #{k}=#{v.inspect}" }.join
+    "#<#{__realclass__}#{_values}>"
+  end
+
+  alias_method :to_s, :inspect
+
+  private
+
+  def __realclass__
+    (class << self; self end).superclass
   end
 end
