@@ -2,11 +2,15 @@ require "tinyconfig/version"
 
 class Tinyconfig < BasicObject
   class << self
-    def option(option_name)
+    def option(option_name, default=nil)
       option_name = option_name.to_sym
       define_method option_name do |*args|
         if args.length.zero?
-          @_values[option_name]
+          if @_values.include?(option_name)
+            @_values[option_name]
+          else
+            default
+          end
         elsif args.length == 1
           @_values[option_name] = args.first
         else
