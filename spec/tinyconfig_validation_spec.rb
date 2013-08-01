@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class ValidatingConfig < Tinyconfig
+class ValidatingConfig < TinyConfig
   option :integer do |value|
     if value.strip !~ /^[-\d]/
       raise ::ArgumentError, "Not an integer: #{value.inspect}"
@@ -10,7 +10,7 @@ class ValidatingConfig < Tinyconfig
   end
 end
 
-describe Tinyconfig do
+describe TinyConfig do
   let(:cfg) { ValidatingConfig.new }
 
   it 'calls provided block to transform and/or validate value' do
