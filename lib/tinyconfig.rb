@@ -1,6 +1,6 @@
 require "tinyconfig/version"
 
-class Tinyconfig < BasicObject
+class TinyConfig < BasicObject
   class << self
     def option(option_name, default=nil, &block)
       option_name = option_name.to_sym

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-class BasicIdea < Tinyconfig
+class BasicIdea < TinyConfig
   option :opt
   option :defopt, 23
 end
 
-describe Tinyconfig do
+describe TinyConfig do
   let(:cfg) { BasicIdea.new }
 
   describe '.option' do

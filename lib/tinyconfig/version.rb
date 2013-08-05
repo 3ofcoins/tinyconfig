@@ -1,3 +1,3 @@
-class Tinyconfig < BasicObject
+class TinyConfig < BasicObject
   VERSION = "0.0.1"
 end

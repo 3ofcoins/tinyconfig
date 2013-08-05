@@ -8,7 +8,7 @@ require 'wrong'
 
 Wrong.config.alias_assert :expect, override: true
 
-module TinyconfigSpec
+module TinyConfigSpec
   module WrongHelper
     include Wrong::Assert
     include Wrong::Helpers
@@ -20,7 +20,7 @@ module TinyconfigSpec
 end
 
 class MiniTest::Spec
-  include TinyconfigSpec::WrongHelper
+  include TinyConfigSpec::WrongHelper
 
   def fixture(filename)
     File.join(File.dirname(__FILE__), 'fixtures', filename)
@@ -33,9 +33,9 @@ if ENV['COVERAGE']
   SimpleCov.command_name 'rake spec'
 end
 
-# Make Tinyconfig pretty-printable.
+# Make TinyConfig pretty-printable.
 require "tinyconfig"
-class Tinyconfig
+class TinyConfig
   begin
     old_verbose, $VERBOSE = $VERBOSE, nil
     def object_id ; __id__ ; end

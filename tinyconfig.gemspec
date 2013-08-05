@@ -5,7 +5,7 @@ require 'tinyconfig/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "tinyconfig"
-  spec.version       = Tinyconfig::VERSION
+  spec.version       = TinyConfig::VERSION
   spec.authors       = ["Maciej Pasternacki"]
   spec.email         = ["maciej@3ofcoins.net"]
   spec.description   = "Library for defining Ruby-based configuration files"

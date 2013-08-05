@@ -13,17 +13,17 @@ class Default < Thor
     include Thor::RakeCompat
     Bundler::GemHelper.install_tasks
 
-    desc "build", "Build tinyconfig-#{Tinyconfig::VERSION}.gem into the pkg directory"
+    desc "build", "Build tinyconfig-#{TinyConfig::VERSION}.gem into the pkg directory"
     def build
       Rake::Task["build"].execute
     end
 
-    desc "release", "Create tag v#{Tinyconfig::VERSION} and build and push tinyconfig-#{Tinyconfig::VERSION}.gem to Rubygems"
+    desc "release", "Create tag v#{TinyConfig::VERSION} and build and push tinyconfig-#{TinyConfig::VERSION}.gem to Rubygems"
     def release
       Rake::Task["release"].execute
     end
 
-    desc "install", "Build and install tinyconfig-#{Tinyconfig::VERSION}.gem into system gems"
+    desc "install", "Build and install tinyconfig-#{TinyConfig::VERSION}.gem into system gems"
     def install
       Rake::Task["install"].execute
     end
