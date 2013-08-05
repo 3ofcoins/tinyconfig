@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Tinyconfig::VERSION
   spec.authors       = ["Maciej Pasternacki"]
   spec.email         = ["maciej@3ofcoins.net"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = "Library for defining Ruby-based configuration files"
+  spec.summary       = "Library for defining Ruby-based configuration files"
   spec.homepage      = "https://github.com/3ofcoins/tinyconfig/"
   spec.license       = "MIT"
 
