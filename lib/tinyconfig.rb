@@ -1,23 +1,37 @@
 require "tinyconfig/version"
+require 'pry'
 
 class TinyConfig < BasicObject
   class << self
+    #
+    # ### Define new option
     def option(option_name, default=nil, &block)
       option_name = option_name.to_sym
+      getter_name = "__get__#{option_name}".to_sym
       validator = block_given? ? block : nil
+      klass = self
+
+      # Private getter method for the default
+      # http://www.bofh.org.uk/2007/08/16/a-cunning-evil-trick-with-ruby
+      meth = default.respond_to?(:call) ? default : ->{ default }
+      define_method(getter_name, &meth)
+      private(getter_name)
+
       define_method option_name do |*args|
         if args.length.zero?
-          if @_values.include?(option_name)
-            @_values[option_name]
-          else
-            default
-          end
-        elsif validator
-          @_values[option_name] = validator.call(*args)
-        elsif args.length == 1
-          @_values[option_name] = args.first
+          # No args -> get value
+          self.__send__(getter_name)
         else
-          @_values[option_name] = args
+          # Args provided -> set value (i.e. define getter method on the singleton)
+          if validator
+            value = validator.call(*args)
+          elsif args.length == 1
+            value = args.first
+          else
+            value = args
+          end
+          meth = value.respond_to?(:call) ? value : ->{ value }
+          (class << self ; self ; end).send(:define_method, getter_name, &meth)
         end
       end
     end
