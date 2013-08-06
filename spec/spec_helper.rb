@@ -13,6 +13,10 @@ module TinyConfigSpec
     include Wrong::Assert
     include Wrong::Helpers
 
+    def failure_class
+      MiniTest::Assertion
+    end
+
     def increment_assertion_count
       self.assertions += 1
     end
