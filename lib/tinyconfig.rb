@@ -36,6 +36,13 @@ class TinyConfig < BasicObject
     end
   end
 
+  # make arrow lambdas work on Rubinius
+  if ::RUBY_ENGINE == 'rbx'
+    def lambda(*args, &block)
+      ::Kernel.lambda(*args, &block)
+    end
+  end
+
   def initialize
     @_values = {}
   end
