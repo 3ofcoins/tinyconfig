@@ -1,5 +1,4 @@
 require "tinyconfig/version"
-require 'pry'
 
 class TinyConfig < BasicObject
   class << self
