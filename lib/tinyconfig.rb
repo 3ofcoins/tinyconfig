@@ -51,9 +51,15 @@ class TinyConfig < BasicObject
     self.instance_eval(&block)
   end
 
+	#loads multiple files recognizing wildcards
+	#or arrays one by one
   def load(path)
-    full_path = ::File.join(::File.dirname(::Kernel.caller.first), path)
-    self.instance_eval(::File.read(full_path), full_path, 0)
+    file_list = Dir.glob(path)
+    file_list.each do
+      |file| puts "Loading #{file}." #just checking
+      full_path = ::File.join(::File.dirname(::Kernel.caller.first), file)
+      self.instance_eval(::File.read(full_path), full_path, 0)
+    end
   end
 
   #
