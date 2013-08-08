@@ -96,6 +96,34 @@ You can use the `load` method multiple times from your code, or you
 can `load` other files from your config files. You can also use
 `cfg.configure` method to update the configuration inline in a block.
 
+When you provide a lambda as a default or provided value, it will be
+called at runtime to determine the value. This way you can use
+settings that are not yet specified when the config file is being
+read:
+
+```ruby
+class LambdaExample < TinyConfig
+  option :foo
+  option :bar, ->{ "Bar for foo=#{foo.inspect}" }
+  option :baz
+end
+
+cfg = LambdaExample.new
+cfg.bar # => "Bar for foo=nil"
+
+cfg.configure do
+  foo 23
+end
+cfg.bar # => "Bar for foo=23"
+
+cfg.configure do
+  baz ->{ bar.reverse }
+end
+cfg.baz # => "32=oof rof raB"
+```
+
+For details and corner cases, look into `spec/` for the test cases.
+
 ## Acknowledements
 
 TinyConfig has been heavily inspired by Opscode's
