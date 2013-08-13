@@ -50,9 +50,16 @@ class TinyConfig < BasicObject
     self.instance_eval(&block)
   end
 
-  def load(path)
-    full_path = ::File.join(::File.dirname(::Kernel.caller.first), path)
-    self.instance_eval(::File.read(full_path), full_path, 0)
+  def load(glob)
+    # If glob is relative, we want to interpret it relative to the
+    # calling file (directory that contains the ruby source file that
+    # has called the `TinyConfig#load` method) rather than whatever is
+    # the process' `Dir.getwd`.
+    glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
+
+    ::Dir.glob(glob).sort.each do |path|
+      self.instance_eval(::File.read(path), path, 0)
+    end
   end
 
   #

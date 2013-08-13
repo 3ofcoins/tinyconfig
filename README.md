@@ -92,8 +92,11 @@ hello.rb:9:in `block in <class:HelloConfig>': "whatever" is not a number or is l
 ```
 
 You can use the `load` method multiple times from your code, or you
-can `load` other files from your config files. You can also use
-`cfg.configure` method to update the configuration inline in a block.
+can `load` other files from your config files. The method also accepts
+glob expressions (e.g. `load 'config_*.rb'`).
+
+You can also use `cfg.configure` method to update the configuration
+inline in a block.
 
 When you provide a lambda as a default or provided value, it will be
 called at runtime to determine the value. This way you can use
