@@ -38,6 +38,11 @@ describe TinyConfig do
       cfg.load('fixtures/basic_nested.rb')
       expect { cfg.opt == 23 }
     end
+
+    it "can load files by a glob expression" do
+      cfg.load('fixtures/glob*.rb')
+      expect { cfg.opt == 17 }
+    end
   end
 
   describe '(configuration block)' do
