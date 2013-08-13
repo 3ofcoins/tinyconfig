@@ -58,7 +58,7 @@ class TinyConfig < BasicObject
     # the process' `Dir.getwd`.
     glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
 
-    ::Dir.glob(glob).each do |path|
+    ::Dir.glob(glob).sort.each do |path|
       self.instance_eval(::File.read(path), path, 0)
     end
   end
