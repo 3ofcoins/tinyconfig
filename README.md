@@ -72,7 +72,6 @@ $ ruby hello.rb config2.rb
 Hello, World!
 Hello, World!
 Hello, World!
-$ bundle outdated
 $ cat config3.rb
 repeat '2'
 extra_greeting 'Really, hello!'
