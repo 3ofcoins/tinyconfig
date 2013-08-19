@@ -8,7 +8,6 @@ class TinyConfig < BasicObject
       option_name = option_name.to_sym
       getter_name = "__get__#{option_name}".to_sym
       validator = block_given? ? block : nil
-      klass = self
 
       # Private getter method for the default
       # http://www.bofh.org.uk/2007/08/16/a-cunning-evil-trick-with-ruby
