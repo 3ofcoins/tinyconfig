@@ -45,6 +45,14 @@ describe TinyConfig do
     end
   end
 
+
+  describe "#load_directory" do
+    it "loads all files in the directory next to current config file, of the same name as current config" do
+      cfg.load("fixtures/directory.rb")
+      expect { cfg.opt == 17 }
+    end
+  end
+
   describe "(configuration block)" do
     it "raises an exception when somebody tries to set undefined value" do
       expect { rescuing { cfg.configure { nopt -1 } }.is_a? NoMethodError }
