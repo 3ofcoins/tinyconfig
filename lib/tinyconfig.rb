@@ -63,6 +63,9 @@ class TinyConfig < BasicObject
     end
   end
 
+  def load_directory
+    __FILE__.load("#{__FILE__}\*.rb")
+  end
   #
   # Compat methods
   # --------------
