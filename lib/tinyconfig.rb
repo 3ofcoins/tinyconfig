@@ -64,7 +64,9 @@ class TinyConfig < BasicObject
   end
 
   def load_directory
-    load("#{__FILE__.to_str[0..-4]}/*.rb")
+    directory_name = ::File.join(::File.dirname(::Kernel.caller.first), ::File.basename("", ".rb"))
+    ::Kernel::p directory_name
+    load(::File.join(directory_name, "*.rb"))
   end
   #
   # Compat methods
