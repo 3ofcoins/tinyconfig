@@ -64,8 +64,10 @@ class TinyConfig < BasicObject
   end
 
   def load_directory
-    directory_name = ::File.join(::File.dirname(::Kernel.caller.first), ::File.basename("", ".rb"))
-    ::Kernel::p directory_name
+    directory_name = ::File.join(::File.dirname(::Kernel.caller.first), ::File.basename(::Kernel.caller.first, ".*"))
+    ::Kernel::p ::File.basename(::Kernel.caller.first) # => "directory.rb:in `block in load'"
+    ::Kernel::p directory_name # => "/home/.../tinyconfig/spec/fixtures/directory"
+    ::Kernel::p ::File.join(directory_name, "*.rb") # => "/home/.../tinyconfig/spec/fixtures/directory/*.rb"
     load(::File.join(directory_name, "*.rb"))
   end
   #
