@@ -56,21 +56,24 @@ class TinyConfig < BasicObject
     # calling file (directory that contains the ruby source file that
     # has called the `TinyConfig#load` method) rather than whatever is
     # the process' `Dir.getwd`.
-    ::Kernel::puts "glob passed as argument: #{glob.inspect}"
+    #::Kernel::puts "glob passed as argument: #{glob.inspect}"
     glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
-    ::Kernel::puts "glob after parsing: #{glob.inspect}"
-
-    ::Dir.glob(glob).sort.each do |path|
-      self.instance_eval(::File.read(path), path, 0)
-    end
+    #::Kernel::puts "glob after parsing: #{glob.inspect}"
+    ::Kernel::p self
+    load_helper(glob)
+    
   end
 
-  def load_directory
-    directory_name = ::File.join(::File.dirname(::Kernel.caller.first), ::File.basename(::Kernel.caller.first, ".*"))
+  def load_in_bulk
+    directory_name = ::File.join(::File.dirname(::Kernel.caller[0]), ::File.basename(::Kernel.caller[0], ".*"))
     #::Kernel::p ::File.basename(::Kernel.caller.first) # => "directory.rb:in `block in load'"
     #::Kernel::p directory_name # => "/home/.../tinyconfig/spec/fixtures/directory"
     #::Kernel::p ::File.join(directory_name, "*.rb") # => "/home/.../tinyconfig/spec/fixtures/directory/*.rb"
-    load(::File.join(directory_name, "*.rb"))
+    #load(::File.join(directory_name, "*.rb"))
+    
+    globa = ::File.join(directory_name, "*.rb")
+    
+    load_helper(globa)
   end
   #
   # Compat methods
@@ -85,6 +88,13 @@ class TinyConfig < BasicObject
 
   private
 
+  def load_helper(glob)
+    ::Dir.glob(glob).sort.each do |path|
+    self.instance_eval(::File.read(path), path, 0)
+    ::Kernel::p "Loading helper."
+    end
+  end
+  
   def __realclass__
     (class << self; self end).superclass
   end

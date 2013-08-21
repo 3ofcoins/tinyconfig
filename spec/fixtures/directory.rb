@@ -1,1 +1,1 @@
-load_directory
+load_in_bulk
