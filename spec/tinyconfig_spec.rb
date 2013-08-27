@@ -46,7 +46,7 @@ describe TinyConfig do
   end
 
 
-  describe "#load_in_bulk" do
+  describe "#bulk_load" do
     it "loads all files in the directory next to current config file, of the same name as current config" do
       cfg.load("fixtures/directory.rb")
       expect { cfg.opt == 17 }

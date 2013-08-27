@@ -61,7 +61,7 @@ class TinyConfig < BasicObject
     load_helper(glob)
   end
 
-  def load_in_bulk
+  def bulk_load
     caller_path = ::Kernel.caller.first.sub(/(:\d+)?(:in .*)?$/, '')
     directory_name = ::File.join(
       ::File.dirname(caller_path),
