@@ -93,7 +93,16 @@ hello.rb:9:in `block in <class:HelloConfig>': "whatever" is not a number or is l
 
 You can use the `load` method multiple times from your code, or you
 can `load` other files from your config files. The method also accepts
-glob expressions (e.g. `load 'config_*.rb'`).
+glob expressions (e.g. `load 'config_*.rb'`). The `bulk_load` method load all files
+in the directory next to current config file, of the same name as current config.
+
+Example: If file `foo.rb` calls:
+
+`bulk_load`
+
+it should do the same as
+
+`load 'foo/*.rb'`
 
 You can also use `cfg.configure` method to update the configuration
 inline in a block.
