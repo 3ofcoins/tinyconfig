@@ -8,7 +8,6 @@ class TinyConfig < BasicObject
       option_name = option_name.to_sym
       getter_name = "__get__#{option_name}".to_sym
       validator = block_given? ? block : nil
-      klass = self
 
       # Private getter method for the default
       # http://www.bofh.org.uk/2007/08/16/a-cunning-evil-trick-with-ruby
@@ -58,16 +57,16 @@ class TinyConfig < BasicObject
     # the process' `Dir.getwd`.
 
     glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
-
     load_helper(glob)
   end
 
-  def load_in_bulk #Split to three lines for readability.
-    directory_name = ::File.join(::File.dirname(::Kernel.caller.first), ::File.basename(::Kernel.caller.first, ".*"))
-    
-    bulk_file_source = ::File.join(directory_name, "*.rb")
-
-    load_helper(bulk_file_source)
+  def bulk_load
+    caller_path = ::Kernel.caller.first.sub(/(:\d+)?(:in .*)?$/, '')
+    directory_name = ::File.join(
+      ::File.dirname(caller_path),
+      ::File.basename(caller_path, ".rb"))
+    bulk_glob = ::File.join(directory_name, "*.rb")
+    load_helper(bulk_glob)
   end
 
   #
@@ -85,10 +84,10 @@ class TinyConfig < BasicObject
 
   def load_helper(source)
     ::Dir.glob(source).sort.each do |path|
-    self.instance_eval(::File.read(path), path, 0)
+      self.instance_eval(::File.read(path), path, 0)
     end
   end
-  
+
   def __realclass__
     (class << self; self end).superclass
   end

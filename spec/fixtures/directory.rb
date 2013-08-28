@@ -1,1 +1,1 @@
-load_in_bulk
+bulk_load
