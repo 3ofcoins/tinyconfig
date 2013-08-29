@@ -55,11 +55,18 @@ class TinyConfig < BasicObject
     # calling file (directory that contains the ruby source file that
     # has called the `TinyConfig#load` method) rather than whatever is
     # the process' `Dir.getwd`.
-    glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
 
-    ::Dir.glob(glob).sort.each do |path|
-      self.instance_eval(::File.read(path), path, 0)
-    end
+    glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
+    load_helper(glob)
+  end
+
+  def bulk_load
+    caller_path = ::Kernel.caller.first.sub(/(:\d+)?(:in .*)?$/, '')
+    directory_name = ::File.join(
+      ::File.dirname(caller_path),
+      ::File.basename(caller_path, ".rb"))
+    bulk_glob = ::File.join(directory_name, "*.rb")
+    load_helper(bulk_glob)
   end
 
   #
@@ -74,6 +81,12 @@ class TinyConfig < BasicObject
   alias_method :to_s, :inspect
 
   private
+
+  def load_helper(source)
+    ::Dir.glob(source).sort.each do |path|
+      self.instance_eval(::File.read(path), path, 0)
+    end
+  end
 
   def __realclass__
     (class << self; self end).superclass
