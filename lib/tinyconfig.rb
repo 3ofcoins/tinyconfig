@@ -56,7 +56,7 @@ class TinyConfig < BasicObject
     # has called the `TinyConfig#load` method) rather than whatever is
     # the process' `Dir.getwd`.
 
-    glob = ::File.join(::File.dirname(::Kernel.caller.first), glob)
+    glob = ::File.expand_path(glob, ::File.dirname(::Kernel.caller.first))
     load_helper(glob)
   end
 

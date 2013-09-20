@@ -43,6 +43,17 @@ describe TinyConfig do
       cfg.load("fixtures/glob*.rb")
       expect { cfg.opt == 17 }
     end
+
+    it 'will handle absolute paths/globs correctly' do
+      cfg.load(File.join(File.dirname(__FILE__), 'fixtures/basic.rb'))
+      expect { cfg.opt == 23 }
+
+      cfg.load(File.join(File.dirname(__FILE__), 'fixtures/basic_nested.rb'))
+      expect { cfg.opt == 23 }
+
+      cfg.load(File.join(File.dirname(__FILE__), 'fixtures/glob*.rb'))
+      expect { cfg.opt == 17 }
+    end
   end
 
   describe "#bulk_load" do
