@@ -2,24 +2,43 @@ require "tinyconfig/version"
 
 class TinyConfig < BasicObject
   class << self
+    #
+    # ### Define new option
     def option(option_name, default=nil, &block)
       option_name = option_name.to_sym
+      getter_name = "__get__#{option_name}".to_sym
       validator = block_given? ? block : nil
+
+      # Private getter method for the default
+      # http://www.bofh.org.uk/2007/08/16/a-cunning-evil-trick-with-ruby
+      meth = default.respond_to?(:call) ? default : ->{ default }
+      define_method(getter_name, &meth)
+      private(getter_name)
+
       define_method option_name do |*args|
         if args.length.zero?
-          if @_values.include?(option_name)
-            @_values[option_name]
-          else
-            default
-          end
-        elsif validator
-          @_values[option_name] = validator.call(*args)
-        elsif args.length == 1
-          @_values[option_name] = args.first
+          # No args -> get value
+          self.__send__(getter_name)
         else
-          @_values[option_name] = args
+          # Args provided -> set value (i.e. define getter method on the singleton)
+          if validator
+            value = validator.call(*args)
+          elsif args.length == 1
+            value = args.first
+          else
+            value = args
+          end
+          meth = value.respond_to?(:call) ? value : ->{ value }
+          (class << self ; self ; end).send(:define_method, getter_name, &meth)
         end
       end
+    end
+  end
+
+  # make arrow lambdas work on Rubinius
+  if ::RUBY_ENGINE == 'rbx'
+    def lambda(*args, &block)
+      ::Kernel.lambda(*args, &block)
     end
   end
 
@@ -31,9 +50,23 @@ class TinyConfig < BasicObject
     self.instance_eval(&block)
   end
 
-  def load(path)
-    full_path = ::File.join(::File.dirname(::Kernel.caller.first), path)
-    self.instance_eval(::File.read(full_path), full_path, 0)
+  def load(glob)
+    # If glob is relative, we want to interpret it relative to the
+    # calling file (directory that contains the ruby source file that
+    # has called the `TinyConfig#load` method) rather than whatever is
+    # the process' `Dir.getwd`.
+
+    glob = ::File.expand_path(glob, ::File.dirname(::Kernel.caller.first))
+    load_helper(glob)
+  end
+
+  def bulk_load
+    caller_path = ::Kernel.caller.first.sub(/(:\d+)?(:in .*)?$/, '')
+    directory_name = ::File.join(
+      ::File.dirname(caller_path),
+      ::File.basename(caller_path, ".rb"))
+    bulk_glob = ::File.join(directory_name, "*.rb")
+    load_helper(bulk_glob)
   end
 
   #
@@ -48,6 +81,12 @@ class TinyConfig < BasicObject
   alias_method :to_s, :inspect
 
   private
+
+  def load_helper(source)
+    ::Dir.glob(source).sort.each do |path|
+      self.instance_eval(::File.read(path), path, 0)
+    end
+  end
 
   def __realclass__
     (class << self; self end).superclass
