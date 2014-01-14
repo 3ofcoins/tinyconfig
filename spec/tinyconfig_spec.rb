@@ -26,6 +26,11 @@ describe TinyConfig do
 
       expect { cfg.opt == 23 }
     end
+
+    it "also accepts a string" do
+      cfg.configure "opt 23"
+      expect { cfg.opt == 23 }
+    end
   end
 
   describe "#load" do
