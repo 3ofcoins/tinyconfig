@@ -2,6 +2,11 @@ Changes
 =======
 
  * `TinyConfig#config` accepts a string
+ 
+0.1.0
+-----
+
+ * Loading folders
 
 0.0.1
 -----
