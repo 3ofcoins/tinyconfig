@@ -1,6 +1,9 @@
 Changes
 =======
 
+0.1.1
+-----
+
  * `TinyConfig#config` accepts a string
  
 0.1.0
