@@ -46,8 +46,8 @@ class TinyConfig < BasicObject
     @_values = {}
   end
 
-  def configure(&block)
-    self.instance_eval(&block)
+  def configure(*args, &block)
+    self.instance_eval(*args, &block)
   end
 
   def load(glob)
